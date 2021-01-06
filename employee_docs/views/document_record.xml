@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+        <record model="ir.ui.view" id="tree_view_docs">
+            <field name="name">doc.tree.view</field>
+            <field name="model">document.record</field>
+            <field name="arch" type="xml">
+                <tree string="Document">
+                    <field name="name"/>
+                    <field name="doc_name"/>
+                    <field name="employee_id"/>
+                    <field name="end_date"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Form view -->
+        <record model="ir.ui.view" id="docs_form_view">
+            <field name="name">docs.form.view</field>
+            <field name="model">document.record</field>
+            <field name="arch" type="xml">
+                <form string="Document">
+                    <header>
+                        <button string="Approve" type="object"
+                                name="set_approve" class="btn-primary"
+                                attrs="{'invisible':['|', ('state', '=', 'approve'),
+                                ('state', '=', 'refuse')]}">
+                            </button>
+                            <button string="Refuse" type="object"
+                                name="set_refuse"
+                                attrs="{'invisible':[('state', '=', 'refuse')]}">
+                            </button>
+                            <button string="Reset to Draft" type="object"
+                                name="set_draft" class="btn-primary"
+                                attrs="{'invisible':[('state', '!=', 'refuse')]}">
+                            </button>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,approve"
+                                clickable="True">
+                            </field>
+                    </header>
+                    <sheet>
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                        <group>
+                            <group>
+                                <field name="doc_name"/>
+                                <field name="document"/>
+                            </group>
+                            <group>
+                                <field name="employee_id"/>
+                                <field name="end_date"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="action_view_docs">
+            <field name="name">Documents</field>
+            <field name="res_model">document.record</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create"> Create new documents
+                </p>
+            </field>
+        </record>
+        <menuitem id="menu_document" name="Document"/>
+        <menuitem id="child_doc" name="Docs" parent="employee_docs.menu_document"
+            action="action_view_docs"/>
+
+</odoo>
